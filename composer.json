@@ -1,13 +1,13 @@
 {
-    "name": "callmez/yii2-wechat-sdk",
+    "name": "anruence/yii2-wechat-sdk",
     "type": "yii2-extension",
     "description": "The wechat api for the Yii framework",
     "keywords": ["yii2", "wechat", "weixin", "sdk"],
     "license": "MIT",
     "support": {
-        "issues": "https://github.com/callmez/yii2-wechat-sdk/issues",
-        "wiki": "https://github.com/callmez/yii2-wechat-sdk/wiki",
-        "source": "https://github.com/callmez/yii2-wechat-sdk"
+        "issues": "https://github.com/anruence/yii2-wechat-sdk/issues",
+        "wiki": "https://github.com/anruence/yii2-wechat-sdk/wiki",
+        "source": "https://github.com/anruence/yii2-wechat-sdk"
     },
     "authors": [
         {
@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "callmez\\wechat\\sdk\\": ""
+            "anruence\\wechat\\sdk\\": ""
         }
     }
 }
