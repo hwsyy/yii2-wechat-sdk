@@ -149,7 +149,7 @@ class Wechat extends Component
     /**
      * 商品创建
      */
-    const WECHAT_SHOP_PRODUCT_CREATE_URL  = '/merchant/create?';
+    const WECHAT_SHOP_PRODUCT_CREATE_URL = '/merchant/create?';
     /**
      * 商品删除
      */
@@ -556,7 +556,7 @@ class Wechat extends Component
     {
         if (!isset($data['access_token'])) {
             throw new InvalidParamException('The wechat access_token must be set.');
-        } elseif(!isset($data['expire'])) {
+        } elseif (!isset($data['expire'])) {
             throw new InvalidParamException('Wechat access_token expire time must be set.');
         }
         $this->_accessToken = [
@@ -618,7 +618,7 @@ class Wechat extends Component
     {
         if (!isset($data['ticket'])) {
             throw new InvalidParamException('The wechat js api ticket must be set.');
-        } elseif(!isset($data['expire'])) {
+        } elseif (!isset($data['expire'])) {
             throw new InvalidParamException('Wechat jsapi_ticket expire time must be set.');
         }
         $this->_jsApiTicket = [
@@ -816,27 +816,15 @@ class Wechat extends Component
      *   ]
      *
      *   ]
-     * @param $toUser 关注者openID
-     * @param $templateId 模板ID(模板需在公众平台模板消息中挑选)
-     * @param array $data 模板需要的数据
+     * @param array $dataArr 模板需要的数据
      * @return int|bool
      */
-    public function sendTemplateMessage($toUser, $templateId, array $data)
+    public function sendTemplateMessage($dataArr)
     {
-
-        if (empty($data)) {
+        if (empty($dataArr)) {
             return false;
         }
-
-        $requestParams = [
-                    'touser' => $toUser,
-                    'template_id' => $templateId,
-                    'url' => null,
-                    'topcolor' => '#FF0000',
-                    'data' => $data
-                ];
-
-        $result = $this->httpRaw(self::WECHAT_TEMPLATE_MESSAGE_SEND_URL . 'access_token=' . $this->getAccessToken(), $requestParams);
+        $result = $this->httpRaw(self::WECHAT_TEMPLATE_MESSAGE_SEND_URL . 'access_token=' . $this->getAccessToken(), $dataArr);
         return isset($result['errmsg']) && $result['errmsg'] == 'ok' ? $result['msgid'] : false;
     }
 
@@ -1035,9 +1023,9 @@ class Wechat extends Component
             ];
         }
         $result = $this->httpRaw(self::WECHAT_ARTICLES_SEND_URL . 'access_token=' . $this->getAccessToken(), $target + [
-            $type => $content,
-            'msgtype' => $type
-        ]);
+                $type => $content,
+                'msgtype' => $type
+            ]);
         return isset($result['msg_id']) ? $result : false;
     }
 
@@ -1088,9 +1076,9 @@ class Wechat extends Component
     {
         $result = $this->httpPost(self::WECHAT_MEDIA_UPLOAD_URL .
             'access_token=' . $this->getAccessToken() . '&type=' . $mediaType, [
-                // php 5.5将抛弃@写法,引用CURLFile类来实现 @see http://segmentfault.com/a/1190000000725185
-                'media' => class_exists('\CURLFile') ? new \CURLFile($filePath) : '@' . $filePath
-            ]);
+            // php 5.5将抛弃@写法,引用CURLFile类来实现 @see http://segmentfault.com/a/1190000000725185
+            'media' => class_exists('\CURLFile') ? new \CURLFile($filePath) : '@' . $filePath
+        ]);
         return isset($result['media_id']) ? $result : false;
     }
 
@@ -1326,11 +1314,11 @@ class Wechat extends Component
     public function getOauth2AccessToken($code, $grantType = 'authorization_code')
     {
         $result = $this->httpGet(self::WECHAT_OAUTH2_ACCESS_TOKEN_URL . http_build_query([
-            'appid' => $this->appId,
-            'secret' => $this->appSecret,
-            'code' => $code,
-            'grant_type' => $grantType
-        ]));
+                'appid' => $this->appId,
+                'secret' => $this->appSecret,
+                'code' => $code,
+                'grant_type' => $grantType
+            ]));
         return isset($result['errmsg']) ? false : $result;
     }
 
@@ -1344,10 +1332,10 @@ class Wechat extends Component
     public function refreshOauth2AccessToken($refreshToken, $grantType = 'refresh_token')
     {
         $result = $this->httpGet(self::WECHAT_OAUTH2_ACCESS_TOKEN_REFRESH_URL . http_build_query([
-            'appid' => $this->appId,
-            'grant_type' => $grantType,
-            'refresh_token' => $refreshToken
-        ]));
+                'appid' => $this->appId,
+                'grant_type' => $grantType,
+                'refresh_token' => $refreshToken
+            ]));
         return isset($result['errmsg']) ? false : $result;
     }
 
@@ -1360,9 +1348,9 @@ class Wechat extends Component
     public function checkOauth2AccessToken($accessToken, $openId)
     {
         $result = $this->httpGet(self::WECHAT_SNS_AUTH_URL . http_build_query([
-            'access_token' => $accessToken,
-            'openid' => $openId
-        ]));
+                'access_token' => $accessToken,
+                'openid' => $openId
+            ]));
         return isset($result['errmsg']) && $result['errmsg'] == 'ok';
     }
 
@@ -1376,10 +1364,10 @@ class Wechat extends Component
     public function getSnsMemberInfo($openId, $oauth2AccessToken, $lang = 'zh_CN')
     {
         $result = $this->httpGet(self::WEHCAT_SNS_USER_INFO_URL . http_build_query([
-            'access_token' => $oauth2AccessToken,
-            'openid' => $openId,
-            'lang' => $lang
-        ]));
+                'access_token' => $oauth2AccessToken,
+                'openid' => $openId,
+                'lang' => $lang
+            ]));
         return isset($result['errmsg']) ? false : $result;
     }
 
@@ -1546,9 +1534,9 @@ class Wechat extends Component
     public function updateProductStatus($productId, $status)
     {
         $result = $this->httpRaw(self::WECHAT_SHOP_STATUS_PRODUCT_UPDATE_URL . 'access_token=' . $this->getAccessToken(), [
-                'product_id' => $productId,
-                'status' => $status
-            ]);
+            'product_id' => $productId,
+            'status' => $status
+        ]);
         return isset($result['errmsg']) && $result['errmsg'] == 'success';
     }
 
@@ -1705,8 +1693,8 @@ class Wechat extends Component
     public function getCategorySkuList($cateId)
     {
         $result = $this->httpRaw(self::WECHAT_SHOP_CATEGORY_SKU_LIST_GET_URL . 'access_token=' . $this->getAccessToken(), [
-                'cate_id' => $cateId
-            ]);
+            'cate_id' => $cateId
+        ]);
         return isset($result['errmsg']) && $result['errmsg'] == 'success' ? $result['sku_table'] : false;
     }
 
@@ -1718,8 +1706,8 @@ class Wechat extends Component
     public function getCategoryProperty($cateId)
     {
         $result = $this->httpRaw(self::WECHAT_SHOP_CATEGORY_PROPERTY_GET_URL . 'access_token=' . $this->getAccessToken(), [
-                'cate_id' => $cateId
-            ]);
+            'cate_id' => $cateId
+        ]);
         return isset($result['errmsg']) && $result['errmsg'] == 'success' ? $result['properties'] : false;
     }
 
@@ -1748,8 +1736,8 @@ class Wechat extends Component
     {
         $result = $this->httpRaw(self::WECHAT_SHOP_DELIVERY_TEMPLATE_DELETE_URL .
             'access_token=' . $this->getAccessToken(), [
-                'template_id' => $templateId
-            ]);
+            'template_id' => $templateId
+        ]);
         return isset($result['errmsg']) && $result['errmsg'] == 'success';
     }
 
@@ -1763,9 +1751,9 @@ class Wechat extends Component
     {
         $result = $this->httpRaw(self::WECHAT_SHOP_DELIVERY_TEMPLATE_UPDATE_URL .
             'access_token=' . $this->getAccessToken(), [
-                'template_id' => $templateId,
-                'delivery_template' => $deliveryTemplate
-            ]);
+            'template_id' => $templateId,
+            'delivery_template' => $deliveryTemplate
+        ]);
         return isset($result['errmsg']) && $result['errmsg'] == 'success';
     }
 
@@ -1778,8 +1766,8 @@ class Wechat extends Component
     {
         $result = $this->httpRaw(self::WECHAT_SHOP_DELIVERY_TEMPLATE_ID_GET_URL .
             'access_token=' . $this->getAccessToken(), [
-                'template_id' => $templateId
-            ]);
+            'template_id' => $templateId
+        ]);
         return isset($result['errmsg']) && $result['errmsg'] == 'success' ? $result['template_info'] : false;
     }
 
@@ -1827,8 +1815,8 @@ class Wechat extends Component
     public function updateShelf($shelfId, $data)
     {
         $data = [
-            'shelf_id' => $shelfId
-        ] + $data;
+                'shelf_id' => $shelfId
+            ] + $data;
         $result = $this->httpRaw(self::WECHAT_SHOP_SHELF_UPDATE_URL . 'access_token=' . $this->getAccessToken(), $data);
         return isset($result['errmsg']) && $result['errmsg'] == 'success';
     }
@@ -1897,16 +1885,16 @@ class Wechat extends Component
      * 设置订单发货信息
      * @param $orderId 订单ID
      * @param $deliveryCompany 物流公司ID
-     *    邮政EMS	Fsearch_code
-     *    申通快递	002shentong
-     *    中通速递	066zhongtong
-     *    圆通速递	056yuantong
-     *    天天快递	042tiantian
-     *    顺丰速运	003shunfeng
-     *    韵达快运	059Yunda
-     *    宅急送	    064zhaijisong
-     *    汇通快运	020huitong
-     *    易迅快递	zj001yixun
+     *    邮政EMS    Fsearch_code
+     *    申通快递    002shentong
+     *    中通速递    066zhongtong
+     *    圆通速递    056yuantong
+     *    天天快递    042tiantian
+     *    顺丰速运    003shunfeng
+     *    韵达快运    059Yunda
+     *    宅急送        064zhaijisong
+     *    汇通快运    020huitong
+     *    易迅快递    zj001yixun
      * @param $deliveryTrackNo 运单ID
      * @return bool
      */
@@ -1914,10 +1902,10 @@ class Wechat extends Component
     {
         $result = $this->httpRaw(self::WECHAT_SHOP_ORDER_DELIVERY_SET_URL .
             'access_token=' . $this->getAccessToken(), [
-                'order_id' => $orderId,
-                'delivery_company' => $deliveryCompany,
-                'delivery_track_no' => $deliveryTrackNo
-            ]);
+            'order_id' => $orderId,
+            'delivery_company' => $deliveryCompany,
+            'delivery_track_no' => $deliveryTrackNo
+        ]);
         return isset($result['errmsg']) && $result['errmsg'] == 'success' ? $result['order_list'] : false;
     }
 
@@ -1949,7 +1937,7 @@ class Wechat extends Component
     }
 
     //=======================卡券部分=========================
-    
+
     /**
      * 上传门店LOGO
      * 门店不同于(微店)门店是线下消费场所
@@ -1965,7 +1953,7 @@ class Wechat extends Component
         $buffer = class_exists('\CURLFile') ? new \CURLFile($filePath) : '@' . $filePath;
 
         $result = $this->httpPost(self::WECHAT_MEDIA_IMG_UPLOAD_URL .
-            'access_token=' . $this->getAccessToken() , [
+            'access_token=' . $this->getAccessToken(), [
             'buffer' => class_exists('\CURLFile') ? new \CURLFile($filePath) : '@' . $filePath
         ]);
 
@@ -2001,7 +1989,7 @@ class Wechat extends Component
     public function getDecryptCode($encrypt_code)
     {
         $result = $this->httpPost(static::WECHAT_CARD_CODE_DECRYPT_URL . 'access_token=' . $this->getAccessToken(), [
-           'encrypt_code' => $encrypt_code
+            'encrypt_code' => $encrypt_code
         ]);
         return isset($result['errmsg']) && $result['errmsg'] === 'ok' ? $result['code'] : false;
     }
@@ -2097,8 +2085,8 @@ class Wechat extends Component
             ]
         ];
         $result = $this->httpRaw(static::WECHAT_CARD_QRCODE_CREATE_URL . 'access_token=' . $this->getAccessToken(),
-                    Json::encode($qrData)
-            );
+            Json::encode($qrData)
+        );
 
         return isset($result['ticket']) ? $result['ticket'] : false;
     }
@@ -2243,8 +2231,8 @@ class Wechat extends Component
             return false;
         }
         $result = $this->httpPost(static::WECHAT_MEMBERCARD_ACTIVATE_URL . 'access_token=' . $this->getAccessToken(),
-                    $requestParams
-            );
+            $requestParams
+        );
         return isset($result['errmsg']) && $result['errmsg'] === 'ok' ? true : false;
     }
 
@@ -2268,8 +2256,8 @@ class Wechat extends Component
             return false;
         }
         $result = $this->httpPost(static::WECHAT_MEMBERCARD_UPDATEUSER_URL . 'access_token=' . $this->getAccessToken(),
-                    $requestParams
-            );
+            $requestParams
+        );
         if (isset($result['errmsg']) && $result['errmsg'] === 'ok') {
             return [
                 'result_bonus' => $result['result_bonus'], //当前用户积分总额
@@ -2336,7 +2324,7 @@ class Wechat extends Component
         if (empty($poi_id)) {
             return false;
         }
-        $raw = Json::encode(['poi_id'=>$poi_id]);
+        $raw = Json::encode(['poi_id' => $poi_id]);
         $result = $this->httpRaw(static::WECHAT_GET_POI_URL . 'access_token=' . $this->getAccessToken(), $raw);
 
         return isset($result['business']) ? $result['business'] : false;
@@ -2371,7 +2359,7 @@ class Wechat extends Component
         if (empty($poi_id)) {
             return false;
         }
-        $raw = Json::encode(['poi_id'=>$poi_id]);
+        $raw = Json::encode(['poi_id' => $poi_id]);
 
         $result = $this->httpRaw(static::WECHAT_DEL_POI_URL . 'access_token=' . $this->getAccessToken(), $raw);
 
@@ -2494,7 +2482,7 @@ class Wechat extends Component
             $url = self::WECHAT_BASE_URL . $url;
         }
         $return = $this->http($url, $params, $method);
-        $return = json_decode($return, true) ? : $return;
+        $return = json_decode($return, true) ?: $return;
         if (isset($return['errcode']) && $return['errcode']) {
             $this->lastErrorInfo = $return;
             $log = [
@@ -2506,7 +2494,7 @@ class Wechat extends Component
                 case 40001: //access_token 失效,强制更新access_token, 并更新地址重新执行请求
                     if ($force) {
                         Yii::warning($log, 'wechat.sdk');
-                        $url = preg_replace_callback("/access_token=([^&]*)/i", function(){
+                        $url = preg_replace_callback("/access_token=([^&]*)/i", function () {
                             return 'access_token=' . $this->getAccessToken(true);
                         }, $url);
                         $return = $this->parseHttpResult($url, $params, $method, false); // 仅重新获取一次,否则容易死循环
