@@ -1,27 +1,7 @@
-yii2-wechat-sdk
-===============
-
-感谢选择 yii2-wechat-sdk 扩展, 该扩展是基于[Yii2](https://github.com/yiisoft/yii2)框架基础开发,借助Yii2的强劲特性可以定制开发属于您自己的微信公众号
-
-[![Latest Stable Version](https://poser.pugx.org/anruence/yii2-wechat-sdk/v/stable.svg)](https://packagist.org/packages/callmez/yii2-wechat-sdk) [![Total Downloads](https://poser.pugx.org/callmez/yii2-wechat-sdk/downloads.svg)](https://packagist.org/packages/callmez/yii2-wechat-sdk) [![Latest Unstable Version](https://poser.pugx.org/callmez/yii2-wechat-sdk/v/unstable.svg)](https://packagist.org/packages/callmez/yii2-wechat-sdk) [![License](https://poser.pugx.org/callmez/yii2-wechat-sdk/license.svg)](https://packagist.org/packages/callmez/yii2-wechat-sdk)
-
-注意
----
-  ** 新版本正在重构中, 直到1.0正式版发布前.你依然可以继续使用功能 **
-  
-  目前有3个主要文件可以使用
-  - `Wechat.php` 旧版微信公众号操作类(在新版[1.0]发布后会删除)
-  - `MpWechat.php` 新版微信公众号操作类(更标准,更完善), 如果您是新使用该库请按照文档说明替换旧版`Wechat.php`使用
-  - `QyWechat.php` 新版微信企业号操作类(为了更加全面的微信功能操作, 将在[1.1版本中完善发布]), 强势集成企业号功能
-
-环境条件
---------
-- >= php5.4
-- Yii2
-
-安装
-----
-
+##安装
+```bash
+composer require "anruence/yii2-wechat-sdk": "dev-master"
+```
 您可以使用composer来安装, 添加下列代码在您的``composer.json``文件中并执行``composer update``操作
 
 ```json
@@ -32,11 +12,12 @@ yii2-wechat-sdk
 }
 ```
 
-使用示例
---------
+##使用示例
+
 在使用前,请先参考微信公众平台的[开发文档](http://mp.weixin.qq.com/wiki/index.php?title=%E9%A6%96%E9%A1%B5)
 
-Wechat定义方式
+- Wechat定义方式
+
 ```php
 //在config/web.php配置文件中定义component配置信息
 'components' => [
@@ -62,8 +43,12 @@ $wechat = Yii::createObject([
 ]);
 ```
 
-Wechat方法使用(部分示例)
+- Wechat方法使用(部分示例)
+
 ```php
+
+$wechat = Yii::$app->wechat;
+
 //获取access_token
 var_dump($wechat->accessToken);
 
@@ -115,12 +100,3 @@ var_dump($media = $wechat->uploadMedia(realpath($filePath), 'image'));
 echo $wechat->getMedia($media['media_id']) ? 'media下载成功' : 'media下载失败';
 
 ```
-
-反馈或贡献代码
---------------
-您可以在[这里](https://github.com/anruence/yii2-wechat-sdk/issues)给我提出在使用中碰到的问题或Bug.
-我会在第一时间回复您并修复.
-
-您也可以 发送邮件callme-z@qq.com给我并且说明您的问题.
-
-如果你有更好代码实现,请fork项目并发起您的pull request.我会及时处理. 感谢!
