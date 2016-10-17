@@ -23,8 +23,6 @@ yii2-wechat-sdk
 ```
 composer require anruence/yii2-wechat-sdk
 ```
-使用示例
---------
 =======
 ##使用示例
 
